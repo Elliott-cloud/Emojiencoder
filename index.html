@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Emoji Creative Canvas</title>
+    <style>
+        body {
+            font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background-color: #c0c0c0; /* 经典Windows灰色背景 */
+            transition: background-color 0.5s;
+        }
+        .main-wrapper {
+            min-height: 100vh;
+            width: 100vw;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .container {
+            max-width: 880px;
+            width: 82.5vh;
+            height: 82.5vh;
+            margin: 0;
+            padding: 22px;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            background-color: #c0c0c0; /* Windows灰色 */
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff; /* 经典Windows 3D边框 */
+            border-radius: 0; /* 移除圆角 */
+            box-shadow: 1px 1px 0 #000000; /* 简单阴影 */
+            position: relative;
+        }
+        .container::before {
+            content: "🛑 VIRUS!! - EmojiEncoder.exe";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #000080; /* Windows蓝 */
+            color: white;
+            font-weight: bold;
+            padding: 2px 5px;
+            box-sizing: border-box;
+            font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+            font-size: 14px;
+        }
+        .container::after {
+            content: "";
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 62px;
+            height: 14px;
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAD4AAAAOCAYAAABXuSs5AAAACXBIWXMAAAsTAAALEwEAmpwYAAAGtmlUWHRYTUw6Y29tLmFkb2JlLnhtcAAAAAAAPD94cGFja2V0IGJlZ2luPSLvu78iIGlkPSJXNU0wTXBDZWhpSHpyZVN6TlRjemtjOWQiPz4gPHg6eG1wbWV0YSB4bWxuczp4PSJhZG9iZTpuczptZXRhLyIgeDp4bXB0az0iQWRvYmUgWE1QIENvcmUgNS42LWMxNDUgNzkuMTYzNDk5LCAyMDE4LzA4LzEzLTE2OjQwOjIyICAgICAgICAiPiA8cmRmOlJERiB4bWxuczpyZGY9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkvMDIvMjItcmRmLXN5bnRheC1ucyMiPiA8cmRmOkRlc2NyaXB0aW9uIHJkZjphYm91dD0iIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtbG5zOmRjPSJodHRwOi8vcHVybC5vcmcvZGMvZWxlbWVudHMvMS4xLyIgeG1sbnM6cGhvdG9zaG9wPSJodHRwOi8vbnMuYWRvYmUuY29tL3Bob3Rvc2hvcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RFdnQ9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZUV2ZW50IyIgeG1wOkNyZWF0b3JUb29sPSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHhtcDpDcmVhdGVEYXRlPSIyMDIyLTAzLTIyVDE1OjIzOjE1KzAzOjAwIiB4bXA6TW9kaWZ5RGF0ZT0iMjAyMi0wMy0yMlQxNToyNToxOSswMzowMCIgeG1wOk1ldGFkYXRhRGF0ZT0iMjAyMi0wMy0yMlQxNToyNToxOSswMzowMCIgZGM6Zm9ybWF0PSJpbWFnZS9wbmciIHBob3Rvc2hvcDpDb2xvck1vZGU9IjMiIHBob3Rvc2hvcDpJQ0NQcm9maWxlPSJzUkdCIElFQzYxOTY2LTIuMSIgeG1wTU06SW5zdGFuY2VJRD0ieG1wLmlpZDo3Y2JkOTg2ZC0zZmMwLTM4NDEtOWUzNy00NDQyODZlNjJjY2MiIHhtcE1NOkRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDo2NWQ4ZDk2Ny1iYmFkLTMyNGItODQzNS05YTIyYzUxM2ZkNGUiIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0ieG1wLmRpZDo5NjgwNzFmNy0wY2RkLWJlNDMtOWE4MC0wZjQyYjhiMDQxMjAiPiA8eG1wTU06SGlzdG9yeT4gPHJkZjpTZXE+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJjcmVhdGVkIiBzdEV2dDppbnN0YW5jZUlEPSJ4bXAuaWlkOjk2ODA3MWY3LTBjZGQtYmU0My05YTgwLTBmNDJiOGIwNDEyMCIgc3RFdnQ6d2hlbj0iMjAyMi0wMy0yMlQxNToyMzoxNSswMzowMCIgc3RFdnQ6c29mdHdhcmVBZ2VudD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTkgKFdpbmRvd3MpIi8+IDxyZGY6bGkgc3RFdnQ6YWN0aW9uPSJzYXZlZCIgc3RFdnQ6aW5zdGFuY2VJRD0ieG1wLmlpZDo3MWUyM2E3MC0yOTNmLTc0NGQtOWYyOS1jYTU5ZGU3YzM3MDEiIHN0RXZ0OndoZW49IjIwMjItMDMtMjJUMTU6MjU6MTkrMDM6MDAiIHN0RXZ0OnNvZnR3YXJlQWdlbnQ9IkFkb2JlIFBob3Rvc2hvcCBDQyAyMDE5IChXaW5kb3dzKSIgc3RFdnQ6Y2hhbmdlZD0iLyIvPiA8cmRmOmxpIHN0RXZ0OmFjdGlvbj0ic2F2ZWQiIHN0RXZ0Omluc3RhbmNlSUQ9InhtcC5paWQ6N2NiZDk4NmQtM2ZjMC0zODQxLTllMzctNDQ0Mjg2ZTYyY2NjIiBzdEV2dDp3aGVuPSIyMDIyLTAzLTIyVDE1OjI1OjE5KzAzOjAwIiBzdEV2dDpzb2Z0d2FyZUFnZW50PSJBZG9iZSBQaG90b3Nob3AgQ0MgMjAxOSAoV2luZG93cykiIHN0RXZ0OmNoYW5nZWQ9Ii8iLz4gPC9yZGY6U2VxPiA8L3htcE1NOkhpc3Rvcnk+IDwvcmRmOkRlc2NyaXB0aW9uPiA8L3JkZjpSREY+IDwveDp4bXBtZXRhPiA8P3hwYWNrZXQgZW5kPSJyIj8+2MIhNgAAAGJJREFUSIntlzEOwCAIRfHz6GG9VBfjoIMDwVR/QhdfoiTwQAR1GiNbJJl5AQYF9o0s8QFMQAO+xTfRpZmZ9Q+ccbSVD8BEZ4uLyLaSOxOy2i13ZhQx7K7svFl2V3ZWf1zOBSMUa2P65yoEAAAAAElFTkSuQmCC');
+            pointer-events: none;
+        }
+        .chat-container {
+            flex: none;
+            height: 90px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 11px;
+            display: flex;
+            flex-direction: column;
+            background-color: #ffffff; /* 白色背景 */
+            border: 1px solid;
+            border-color: #808080 #ffffff #ffffff #808080; /* 内嵌效果 */
+            border-radius: 0; /* 移除圆角 */
+            margin-top: 20px; /* 为标题栏留出空间 */
+        }
+        .message-input {
+            display: flex;
+            border-radius: 0; /* 移除圆角 */
+            background-color: #ffffff;
+            padding: 10px 15px;
+            box-shadow: none;
+            margin-top: auto;
+            position: absolute;
+            bottom: 22px;
+            left: 22px;
+            right: 22px;
+            width: calc(100% - 44px);
+            box-sizing: border-box;
+            border: 1px solid;
+            border-color: #808080 #ffffff #ffffff #808080; /* 内嵌效果 */
+        }
+        .message-input textarea {
+            flex: 1;
+            border: none;
+            resize: none;
+            padding: 8px;
+            border-radius: 0;
+            font-size: 16px;
+            outline: none;
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            background: transparent;
+        }
+        .send-btn {
+            background-color: #c0c0c0;
+            color: #000000;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff; /* 经典Windows 3D按钮边框 */
+            width: 60px;
+            height: 40px;
+            border-radius: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        .send-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080; /* 按下时反转边框 */
+            background-color: #b0b0b0; /* 按下时背景色变深 */
+        }
+        .user-message {
+            background-color: #e6e6e6;
+            color: black;
+            padding: 10px 16px;
+            border-radius: 0; /* 移除圆角 */
+            margin: 6px auto;
+            align-self: center;
+            max-width: 60%;
+            word-wrap: break-word;
+            box-shadow: none;
+            position: relative;
+            font-size: 16px;
+            text-align: center;
+            border: 1px solid #808080;
+        }
+        .bot-message {
+            background-color: #f0f0f0;
+            color: black;
+            padding: 12px 16px;
+            border-radius: 0; /* 移除圆角 */
+            margin: 8px auto;
+            align-self: center;
+            max-width: 90%;
+            word-wrap: break-word;
+            box-shadow: none;
+            position: relative;
+            width: auto;
+            text-align: left;
+            font-size: 15px;
+            border: 1px solid #808080;
+        }
+        .emoji-display {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 10px;
+            padding: 5px 0;
+        }
+        .emoji-display span {
+            font-size: 32px;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .emoji-display span:hover {
+            transform: scale(1.2);
+        }
+        .emoji-canvas-container {
+            width: 90%;
+            align-self: center;
+            max-width: 800px;
+            margin: 8px auto;
+            background-color: #c0c0c0;
+            border-radius: 0; /* 移除圆角 */
+            padding: 10px;
+            box-shadow: none;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff; /* 3D边框 */
+        }
+        .emoji-canvas {
+            background-color: #ffffff; /* 纯白色背景 */
+            background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H0V0h5z'/%3E%3Cpath d='M0 0h1v1H0V0zm6 6H5v-1h1v1z'/%3E%3C/g%3E%3C/svg%3E");
+            border-radius: 0;
+            min-height: 200px;
+            height: 280px;
+            margin: 0;
+            padding: 15px;
+            cursor: default;
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+            box-sizing: border-box;
+            border: 1px solid;
+            border-color: #808080 #ffffff #ffffff #808080; /* 内嵌效果 */
+        }
+        .emoji {
+            font-size: 36px;
+            cursor: move;
+            position: absolute;
+            user-select: none;
+            z-index: 1;
+            transition: transform 0.1s;
+        }
+        .emoji:hover {
+            transform: scale(1.1);
+        }
+        .emoji:active {
+            transform: scale(1.2);
+        }
+        .emoji-controls {
+            position: absolute;
+            display: none;
+            top: -15px;
+            right: -15px;
+            background-color: white;
+            border-radius: 15px;
+            padding: 3px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+            z-index: 5;
+        }
+        .emoji:hover .emoji-controls {
+            display: flex;
+        }
+        .emoji-control-btn {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff; /* 3D边框 */
+            cursor: pointer;
+            font-size: 14px;
+            border-radius: 0;
+            margin: 0 2px;
+        }
+        .emoji-control-btn:hover {
+            background-color: #d0d0d0;
+        }
+        .emoji-control-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080; /* 按下时反转边框 */
+        }
+        .tools {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .tool-btn {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff; /* 3D边框 */
+            border-radius: 0;
+            padding: 10px 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            transition: none;
+            font-size: 16px;
+            font-weight: normal;
+            box-shadow: none;
+        }
+        .tool-btn:hover {
+            background-color: #d0d0d0;
+            transform: none;
+            box-shadow: none;
+        }
+        .tool-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080; /* 按下时反转边框 */
+            transform: none;
+            box-shadow: none;
+        }
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .color-picker input {
+            border: 1px solid #808080;
+            outline: none;
+            height: 20px;
+            width: 20px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+        }
+        .gradient-options {
+            position: absolute;
+            display: none;
+            background-color: #c0c0c0;
+            border-radius: 0;
+            padding: 10px;
+            box-shadow: 1px 1px 0 #000000;
+            z-index: 100;
+            flex-direction: column;
+            gap: 6px;
+            width: 220px;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+        }
+        .gradient-options.show {
+            display: flex;
+        }
+        .gradient-option {
+            height: 24px;
+            border-radius: 0;
+            cursor: pointer;
+            transition: none;
+            border: 1px solid #808080;
+        }
+        .gradient-option:hover {
+            transform: none;
+            border: 1px solid #ffffff;
+        }
+        .gradient-btn {
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            cursor: pointer;
+            border: 1px solid #808080;
+        }
+        .diary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 5px 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.3);
+            margin-bottom: 15px;
+        }
+        .diary-date, .diary-weather {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: white;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .diary-date {
+            font-weight: 500;
+        }
+        .diary-date .calendar-icon {
+            margin-right: 6px;
+            font-size: 18px;
+        }
+        .current-weather {
+            font-size: 26px;
+            margin-left: 10px;
+            cursor: pointer;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+        }
+        .weather-selector {
+            position: absolute;
+            display: none;
+            background: rgba(255,255,255,0.95);
+            border-radius: 10px;
+            padding: 8px;
+            gap: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+            z-index: 100;
+        }
+        .weather-selector.show {
+            display: flex;
+        }
+        .weather-option {
+            font-size: 24px;
+            cursor: pointer;
+            opacity: 0.8;
+            transition: all 0.2s;
+        }
+        .weather-option:hover {
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        /* 调整emoji在日记中的样式 */
+        .emoji-canvas .emoji {
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+        @media (max-width: 600px) {
+            .tools {
+                flex-direction: row;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+            .tool-btn {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+        }
+        
+        /* 调整侧面工具栏样式 */
+        .side-tools {
+            position: absolute;
+            right: 22px;
+            top: 60px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 100;
+            width: 180px;
+        }
+        
+        .side-tools .tool-btn {
+            box-shadow: 1px 1px 0 #000000;
+            background-color: #c0c0c0;
+            border-radius: 0;
+            padding: 8px 10px;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+            font-size: 14px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+        }
+        
+        .side-tools .tool-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            background-color: #b0b0b0;
+        }
+        
+        /* 调整颜色选择器 */
+        .color-picker {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .color-picker input {
+            border: 1px solid #808080;
+            outline: none;
+            height: 20px;
+            width: 20px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+        }
+        
+        .gradient-btn {
+            margin-left: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            cursor: pointer;
+            border: 1px solid #808080;
+        }
+        
+        /* 自定义渐变部分 */
+        .custom-gradient {
+            border-top: 1px solid #808080;
+            padding-top: 8px;
+            margin-top: 8px;
+        }
+        
+        .custom-gradient-inputs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        
+        .custom-gradient-inputs input {
+            border: 1px solid #808080;
+            outline: none;
+            width: 20px;
+            height: 20px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+        }
+        
+        .custom-gradient-inputs select {
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            font-size: 12px;
+            border: 2px solid;
+            border-color: #808080 #ffffff #ffffff #808080;
+            background-color: #c0c0c0;
+        }
+        
+        .custom-gradient-preview {
+            height: 24px;
+            border-radius: 0;
+            margin-bottom: 8px;
+            border: 1px solid #808080;
+        }
+        
+        .custom-gradient-btn {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            border-radius: 0;
+            padding: 4px 8px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 12px;
+            font-family: "MS Sans Serif", Arial, sans-serif;
+        }
+        
+        .custom-gradient-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            background-color: #b0b0b0;
+        }
+        
+        /* 添加警告风格元素 */
+        .warning-text {
+            font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+            color: #000000;
+            font-weight: bold;
+            margin: 10px 0;
+            text-align: center;
+        }
+        
+        /* 编码器状态栏 */
+        .encoder-status {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 20px;
+            background-color: #c0c0c0;
+            border-top: 1px solid #808080;
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            padding: 0 5px;
+            color: #000;
+        }
+        
+        .encoder-progress {
+            display: inline-block;
+            width: 100px;
+            height: 10px;
+            background-color: #fff;
+            border: 1px solid #808080;
+            margin-left: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .encoder-progress-bar {
+            position: absolute;
+            height: 100%;
+            width: 70%;
+            background-color: #000080;
+            animation: progress 3s infinite linear;
+        }
+        
+        @keyframes progress {
+            0% { width: 0%; }
+            100% { width: 100%; }
+        }
+        
+        /* 编码器按钮和控制元素 */
+        .encoder-controls {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            display: flex;
+            gap: 5px;
+        }
+        
+        .encoder-button {
+            background-color: #c0c0c0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            padding: 2px 5px;
+            font-family: "MS Sans Serif", Arial, sans-serif;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .encoder-button:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+        }
+        
+        /* 编码统计区 */
+        .encoder-stats {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            font-family: "MS Sans Serif", "Courier New", monospace;
+            font-size: 12px;
+            color: #000;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 3px;
+            border: 1px solid #808080;
+        }
+        /* 底部工具栏横向排列，跟随container下方 */
+        .bottom-tools {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            width: 880px;
+            max-width: 82.5vh;
+            min-width: 320px;
+            margin: 0 auto;
+            gap: 0;
+            z-index: 200;
+            background: #c0c0c0;
+            border: 2px solid #808080;
+            box-shadow: 0 -2px 0 #fff;
+        }
+        .bottom-tools .tool-btn {
+            flex: 1 1 0;
+            margin: 0;
+            border-radius: 0;
+            border: 2px solid;
+            border-color: #ffffff #808080 #808080 #ffffff;
+            background-color: #c0c0c0;
+            font-family: "MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif;
+            font-size: 14px;
+            text-align: center;
+            box-shadow: 1px 1px 0 #000000;
+            padding: 8px 0;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 0;
+            white-space: nowrap;
+        }
+        .bottom-tools .tool-btn:active {
+            border-color: #808080 #ffffff #ffffff #808080;
+            background-color: #b0b0b0;
+        }
+        .bottom-tools .color-picker {
+            justify-content: center;
+            gap: 8px;
+            display: flex;
+            align-items: center;
+        }
+        .bottom-tools .color-picker span {
+            display: inline-block;
+            margin-right: 4px;
+            color: #222;
+        }
+        .bottom-tools .color-picker input {
+            border: 1px solid #808080;
+            outline: none;
+            height: 20px;
+            width: 20px;
+            padding: 0;
+            background: none;
+            cursor: pointer;
+        }
+        .bottom-tools .gradient-btn {
+            margin-left: 5px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(to right, #ff7e5f, #feb47b);
+            border: 1px solid #808080;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="container">
+            <!-- 底部横向工具栏 -->
+            <div style="height: 0;"></div>
+            
+            <div id="gradientOptions" class="gradient-options">
+                <div class="gradient-option" style="background: linear-gradient(to right, #4facfe, #00f2fe);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to right, #ff7e5f, #feb47b);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to right, #a8ff78, #78ffd6);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to right, #f093fb, #f5576c);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to right, #4568dc, #b06ab3);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to right, #0ba360, #3cba92);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to top, #4481eb, #04befe);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to bottom, #48c6ef, #6f86d6);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to bottom, #56ccf2, #2f80ed);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to top, #6a85b6, #bac8e0);"></div>
+                <div class="gradient-option" style="background: linear-gradient(to bottom, #5ee7df, #b490ca);"></div>
+                
+                <!-- 自定义渐变色选项 -->
+                <div class="custom-gradient">
+                    <div class="custom-gradient-inputs">
+                        <input type="color" id="gradientColor1" value="#48c6ef">
+                        <input type="color" id="gradientColor2" value="#6f86d6">
+                        <select id="gradientDirection">
+                            <option value="to right">Horizontal</option>
+                            <option value="to bottom">Vertical</option>
+                            <option value="to bottom right">Diagonal</option>
+                        </select>
+                    </div>
+                    <div class="custom-gradient-preview" id="gradientPreview"></div>
+                    <button class="custom-gradient-btn" id="applyCustomGradient">Apply Custom Gradient</button>
+                </div>
+            </div>
+            
+            <div class="chat-container" id="chatContainer">
+                <!-- 消息会动态添加到这里 -->
+            </div>
+            
+            <div id="canvasMount"></div>
+            
+            <div class="message-input">
+                <textarea id="storyInput" placeholder="Enter your story..." rows="1"></textarea>
+                <button class="send-btn" id="sendBtn">Encode</button>
+            </div>
+        </div>
+        <div class="bottom-tools">
+            <div class="tool-btn color-picker">
+                <span>Canvas Color:</span>
+                <input type="color" id="canvasColorPicker" value="#e8f0fe">
+                <div class="gradient-btn" id="gradientBtn"></div>
+            </div>
+            <div class="tool-btn" id="clearBtn">Clear Canvas</div>
+            <div class="tool-btn" id="saveBtn">Save Creation</div>
+        </div>
+    </div>
+
+    <script>
+        // 获取DOM元素
+        const chatContainer = document.getElementById('chatContainer');
+        const storyInput = document.getElementById('storyInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const canvasColorPicker = document.getElementById('canvasColorPicker');
+        const clearBtn = document.getElementById('clearBtn');
+        const saveBtn = document.getElementById('saveBtn');
+        const gradientBtn = document.getElementById('gradientBtn');
+        const gradientOptions = document.getElementById('gradientOptions');
+        
+        // 自定义渐变色元素
+        const gradientColor1 = document.getElementById('gradientColor1');
+        const gradientColor2 = document.getElementById('gradientColor2');
+        const gradientDirection = document.getElementById('gradientDirection');
+        const gradientPreview = document.getElementById('gradientPreview');
+        const applyCustomGradient = document.getElementById('applyCustomGradient');
+        
+        // 页面加载时添加欢迎消息，并初始化画布
+        window.addEventListener('DOMContentLoaded', () => {
+            // 添加标题而不是欢迎消息
+            const headerText = document.createElement('div');
+            headerText.textContent = 'ENCODER STATUS:';
+            headerText.style.textAlign = 'left';
+            headerText.style.padding = '10px';
+            headerText.style.fontSize = '16px';
+            headerText.style.fontWeight = 'bold';
+            headerText.style.marginBottom = '5px';
+            headerText.style.fontFamily = '"MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif';
+            headerText.style.color = '#000000';
+            chatContainer.appendChild(headerText);
+            
+            // 添加警告信息
+            const warningText = document.createElement('div');
+            warningText.textContent = 'Enter text to encode into emoji language...';
+            warningText.className = 'warning-text';
+            warningText.style.fontSize = '14px';
+            warningText.style.marginBottom = '10px';
+            chatContainer.appendChild(warningText);
+            
+            // 页面加载时就创建画布
+            if (!window.emojiCanvas) {
+                const mount = document.getElementById('canvasMount');
+                window.emojiCanvas = addEmojiCanvas('');
+                mount.appendChild(window.emojiCanvas);
+            }
+            
+            // 创建emoji风格容器，放在画布下方
+            createEmojiStylesContainer();
+            
+            // 调整容器布局，为固定在底部的输入框腾出空间
+            adjustContainerLayout();
+            
+            // 更改发送按钮文字为Encode
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.innerHTML = 'Encode';
+            sendBtn.style.fontSize = '12px';
+            sendBtn.style.fontWeight = 'bold';
+        });
+        
+        // 调整容器布局函数
+        function adjustContainerLayout() {
+            const container = document.querySelector('.container');
+            const messageInput = document.querySelector('.message-input');
+            
+            // 为所有内容元素容器添加底部内边距，为输入框腾出空间
+            // 减少为输入框预留的空间，消除无用空隙
+            document.getElementById('canvasMount').style.marginBottom = '50px';
+            
+            // 添加事件，确保在窗口调整大小时也保持布局
+            window.addEventListener('resize', function() {
+                // 重新调整内容区域的底部边距
+                document.getElementById('canvasMount').style.marginBottom = '50px';
+            });
+        }
+        
+        // 创建emoji风格容器
+        function createEmojiStylesContainer() {
+            // 检查是否已存在容器
+            if (!document.querySelector('.emoji-styles-container')) {
+                const emojiStylesContainer = document.createElement('div');
+                emojiStylesContainer.className = 'emoji-styles-container';
+                emojiStylesContainer.style.width = '90%';
+                emojiStylesContainer.style.maxWidth = '800px';
+                emojiStylesContainer.style.marginTop = '8px';
+                emojiStylesContainer.style.marginBottom = '0px';
+                emojiStylesContainer.style.marginLeft = 'auto';
+                emojiStylesContainer.style.marginRight = 'auto';
+                emojiStylesContainer.style.padding = '8px';
+                emojiStylesContainer.style.borderRadius = '0'; // 移除圆角
+                emojiStylesContainer.style.backgroundColor = '#c0c0c0';
+                emojiStylesContainer.style.boxShadow = 'none';
+                emojiStylesContainer.style.border = '2px solid';
+                emojiStylesContainer.style.borderColor = '#ffffff #808080 #808080 #ffffff'; // 3D边框
+                
+                // 添加默认提示 - 改为警告风格
+                const placeholder = document.createElement('div');
+                placeholder.style.textAlign = 'center';
+                placeholder.style.padding = '10px';
+                placeholder.style.color = '#000000';
+                placeholder.style.fontFamily = '"MS Sans Serif", Arial, sans-serif';
+                placeholder.style.fontWeight = 'bold';
+                placeholder.textContent = 'Send a message to receive emoji options...';
+                emojiStylesContainer.appendChild(placeholder);
+                
+                // 添加到DOM
+                const mount = document.getElementById('canvasMount');
+                mount.appendChild(emojiStylesContainer);
+            }
+        }
+        
+        // 当前画布背景
+        let currentCanvasBackground = '#ffffff';
+        
+        // 改变画布背景颜色
+        canvasColorPicker.addEventListener('input', (e) => {
+            currentCanvasBackground = e.target.value;
+            applyCanvasBackground(currentCanvasBackground);
+        });
+        
+        // 显示渐变色选项
+        gradientBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            gradientOptions.classList.toggle('show');
+            
+            // 定位渐变选项面板
+            const rect = gradientBtn.getBoundingClientRect();
+            gradientOptions.style.top = (rect.bottom + 5) + 'px';
+            gradientOptions.style.left = (rect.left - 70) + 'px';
+        });
+        
+        // 点击页面其他区域关闭渐变选项
+        document.addEventListener('click', () => {
+            gradientOptions.classList.remove('show');
+        });
+        
+        // 设置渐变色背景
+        const gradientElements = document.querySelectorAll('.gradient-option');
+        gradientElements.forEach(element => {
+            element.addEventListener('click', () => {
+                currentCanvasBackground = element.style.background;
+                applyCanvasBackground(currentCanvasBackground);
+                gradientOptions.classList.remove('show');
+            });
+        });
+        
+        // 应用画布背景
+        function applyCanvasBackground(background) {
+            currentCanvasBackground = background;
+            const canvases = document.querySelectorAll('.emoji-canvas');
+            canvases.forEach(canvas => {
+                canvas.style.background = background;
+                // 确保保留像素点背景
+                if (!background.includes('gradient')) {
+                    canvas.style.backgroundColor = background;
+                    canvas.style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H0V0h5z'/%3E%3Cpath d='M0 0h1v1H0V0zm6 6H5v-1h1v1z'/%3E%3C/g%3E%3C/svg%3E\")";
+                } else {
+                    canvas.style.backgroundImage = background;
+                }
+            });
+        }
+        
+        // 清空画布
+        clearBtn.addEventListener('click', () => {
+            const canvases = document.querySelectorAll('.emoji-canvas');
+            canvases.forEach(canvas => {
+                const emojis = canvas.querySelectorAll('.emoji');
+                emojis.forEach(emoji => emoji.remove());
+            });
+        });
+        
+        // 保存创作
+        saveBtn.addEventListener('click', () => {
+            const canvases = document.querySelectorAll('.emoji-canvas');
+            if (canvases.length === 0) {
+                alert('No canvas to save. Please create an Emoji canvas first.');
+                return;
+            }
+            
+            // 使用最后一个画布
+            const canvas = canvases[canvases.length - 1];
+            
+            try {
+                // 创建一个临时的canvas元素
+                const tempCanvas = document.createElement('canvas');
+                const context = tempCanvas.getContext('2d');
+                
+                // 设置canvas大小与emoji画布相同
+                tempCanvas.width = canvas.offsetWidth;
+                tempCanvas.height = canvas.offsetHeight;
+                
+                // 计算背景（纯色或渐变）
+                const canvasBackground = canvas.style.background || currentCanvasBackground;
+                
+                // 填充背景颜色
+                if (canvasBackground.includes('gradient')) {
+                    // 处理渐变背景
+                    const gradient = context.createLinearGradient(0, 0, 0, tempCanvas.height);
+                    // 简单解析渐变字符串来提取颜色
+                    const match = canvasBackground.match(/linear-gradient\(to bottom, (.*?), (.*?)\)/);
+                    if (match && match.length >= 3) {
+                        gradient.addColorStop(0, match[1]);
+                        gradient.addColorStop(1, match[2]);
+                        context.fillStyle = gradient;
+                    } else {
+                        // 回退到蓝色渐变
+                        gradient.addColorStop(0, '#7aadff');
+                        gradient.addColorStop(1, '#4c8bf5');
+                        context.fillStyle = gradient;
+                    }
+                    context.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                } else {
+                    // 纯色背景
+                    context.fillStyle = canvasBackground;
+                    context.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                }
+                // 平铺像素点SVG背景（如果有）
+                const bgImg = canvas.style.backgroundImage;
+                if (bgImg && bgImg.includes('svg')) {
+                    // 提取SVG数据
+                    const svgMatch = bgImg.match(/url\(["']?(data:image\/svg\+xml;[^"')]+)["']?\)/);
+                    if (svgMatch && svgMatch[1]) {
+                        const img = new window.Image();
+                        img.src = svgMatch[1];
+                        img.onload = function() {
+                            // 平铺SVG
+                            for (let x = 0; x < tempCanvas.width; x += img.width) {
+                                for (let y = 0; y < tempCanvas.height; y += img.height) {
+                                    context.drawImage(img, x, y);
+                                }
+                            }
+                            // 绘制emoji
+                            const emojis = canvas.querySelectorAll('.emoji');
+                            emojis.forEach(emoji => {
+                                const x = emoji.offsetLeft;
+                                const y = emoji.offsetTop;
+                                const emojiText = emoji.querySelector('span')?.textContent || '';
+                                context.font = '36px Arial';
+                                context.fillStyle = 'black';
+                                context.fillText(emojiText, x, y + 36);
+                            });
+                            // 下载图片
+                            try {
+                                const dataUrl = tempCanvas.toDataURL('image/png');
+                                const link = document.createElement('a');
+                                link.download = 'emoji-diary.png';
+                                link.href = dataUrl;
+                                link.click();
+                            } catch (e) {
+                                alert('Save failed, possibly due to browser security restrictions. Please try taking a screenshot instead.');
+                            }
+                        };
+                        img.onerror = function() {
+                            // 降级处理：只保存纯色背景+emoji
+                            drawEmojisAndSave();
+                        };
+                        // 提前return，防止后续重复绘制
+                        return;
+                    }
+                }
+                // 如果没有SVG背景，直接保存
+                drawEmojisAndSave();
+                // 绘制emoji和保存的函数
+                function drawEmojisAndSave() {
+                    const emojis = canvas.querySelectorAll('.emoji');
+                    emojis.forEach(emoji => {
+                        const x = emoji.offsetLeft;
+                        const y = emoji.offsetTop;
+                        const emojiText = emoji.querySelector('span')?.textContent || '';
+                        context.font = '36px Arial';
+                        context.fillStyle = 'black';
+                        context.fillText(emojiText, x, y + 36);
+                    });
+                    try {
+                        const dataUrl = tempCanvas.toDataURL('image/png');
+                        const link = document.createElement('a');
+                        link.download = 'emoji-diary.png';
+                        link.href = dataUrl;
+                        link.click();
+                    } catch (e) {
+                        alert('Save failed, possibly due to browser security restrictions. Please try taking a screenshot instead.');
+                    }
+                }
+            } catch (error) {
+                console.error('Save failed:', error);
+                alert('Save failed: ' + error.message);
+            }
+        });
+        
+        // 动态调整文本框高度
+        storyInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+        });
+        
+        // 发送消息
+        sendBtn.addEventListener('click', () => {
+            sendMessage();
+        });
+        
+        // 按Enter发送
+        storyInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+        
+        // 发送消息函数
+        function sendMessage() {
+            const story = storyInput.value.trim();
+            if (!story) return;
+            
+            // 添加用户消息
+            addMessage(story, 'user');
+            storyInput.value = '';
+            storyInput.style.height = 'auto';
+            
+            // 发送到API并添加回复，但不替换已有内容
+            translateToEmoji(story);
+        }
+        
+        // 添加消息到聊天界面，添加可选的ID
+        function addMessage(text, type, id) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = type === 'user' ? 'user-message' : 'bot-message';
+            messageDiv.textContent = text;
+            if (id) {
+                messageDiv.id = id;
+            }
+            chatContainer.appendChild(messageDiv);
+            // 添加后自动滚动到底部
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            return messageDiv;
+        }
+        
+        // 添加Emoji画布
+        function addEmojiCanvas(emojis) {
+            const canvasContainer = document.createElement('div');
+            canvasContainer.className = 'emoji-canvas-container';
+            canvasContainer.style.width = '90%';
+            canvasContainer.style.maxWidth = '800px';
+            
+            const emojiCanvas = document.createElement('div');
+            emojiCanvas.className = 'emoji-canvas';
+            // 设置白色背景和像素点图案
+            emojiCanvas.style.backgroundColor = '#ffffff';
+            emojiCanvas.style.backgroundImage = "url(\"data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1' fill-rule='evenodd'%3E%3Cpath d='M5 0h1L0 5v1H0V0h5z'/%3E%3Cpath d='M0 0h1v1H0V0zm6 6H5v-1h1v1z'/%3E%3C/g%3E%3C/svg%3E\")";
+            
+            // 添加编码器控制按钮
+            const controls = document.createElement('div');
+            controls.className = 'encoder-controls';
+            
+            const refreshBtn = document.createElement('button');
+            refreshBtn.className = 'encoder-button';
+            refreshBtn.textContent = 'Refresh';
+            refreshBtn.addEventListener('click', function() {
+                // 清空聊天容器
+                chatContainer.innerHTML = '';
+                
+                // 重新添加标题和提示文本
+                const headerText = document.createElement('div');
+                headerText.textContent = 'ENCODER STATUS:';
+                headerText.style.textAlign = 'left';
+                headerText.style.padding = '10px';
+                headerText.style.fontSize = '16px';
+                headerText.style.fontWeight = 'bold';
+                headerText.style.marginBottom = '5px';
+                headerText.style.fontFamily = '"MS Sans Serif", "Microsoft Sans Serif", Arial, sans-serif';
+                headerText.style.color = '#000000';
+                chatContainer.appendChild(headerText);
+                
+                const warningText = document.createElement('div');
+                warningText.textContent = 'Enter text to encode into emoji language...';
+                warningText.className = 'warning-text';
+                warningText.style.fontSize = '14px';
+                warningText.style.marginBottom = '10px';
+                chatContainer.appendChild(warningText);
+                
+                // 清空emoji风格容器
+                const emojiStylesContainer = document.querySelector('.emoji-styles-container');
+                if (emojiStylesContainer) {
+                    emojiStylesContainer.innerHTML = '';
+                    
+                    const placeholder = document.createElement('div');
+                    placeholder.style.textAlign = 'center';
+                    placeholder.style.padding = '10px';
+                    placeholder.style.color = '#000000';
+                    placeholder.style.fontFamily = '"MS Sans Serif", Arial, sans-serif';
+                    placeholder.style.fontWeight = 'bold';
+                    placeholder.textContent = 'Send a message to receive emoji options...';
+                    emojiStylesContainer.appendChild(placeholder);
+                }
+                
+                // 清空画布上的emoji
+                const canvas = window.emojiCanvas;
+                if (canvas) {
+                    const emojis = canvas.querySelectorAll('.emoji');
+                    emojis.forEach(emoji => emoji.remove());
+                    
+                    // 更新emoji计数
+                    updateEmojiCount(canvas);
+                }
+                
+                // 更新状态栏
+                const statusBar = canvas.querySelector('.encoder-status');
+                if (statusBar) {
+                    // 清除状态栏所有内容
+                    statusBar.innerHTML = '';
+                    
+                    // 重新添加文本和进度条
+                    statusBar.textContent = 'Ready for encoding...';
+                    
+                    const progress = document.createElement('div');
+                    progress.className = 'encoder-progress';
+                    
+                    const progressBar = document.createElement('div');
+                    progressBar.className = 'encoder-progress-bar';
+                    
+                    progress.appendChild(progressBar);
+                    statusBar.appendChild(progress);
+                }
+            });
+            
+            controls.appendChild(refreshBtn);
+            emojiCanvas.appendChild(controls);
+            
+            // 添加编码统计区
+            const stats = document.createElement('div');
+            stats.className = 'encoder-stats';
+            stats.innerHTML = 'Status: Ready<br>Emoji Count: 0<br>Version: 1.0';
+            emojiCanvas.appendChild(stats);
+            
+            // 添加状态栏
+            const statusBar = document.createElement('div');
+            statusBar.className = 'encoder-status';
+            statusBar.textContent = 'Ready for encoding...';
+            
+            const progress = document.createElement('div');
+            progress.className = 'encoder-progress';
+            
+            const progressBar = document.createElement('div');
+            progressBar.className = 'encoder-progress-bar';
+            
+            progress.appendChild(progressBar);
+            statusBar.appendChild(progress);
+            emojiCanvas.appendChild(statusBar);
+            
+            canvasContainer.appendChild(emojiCanvas);
+            
+            return emojiCanvas;
+        }
+        
+        // 添加单个emoji到画布
+        function addSingleEmoji(emoji, canvas) {
+            if (emoji.trim()) {
+                const emojiContainer = document.createElement('div');
+                emojiContainer.className = 'emoji';
+                
+                // 添加emoji文本
+                const emojiText = document.createElement('span');
+                emojiText.textContent = emoji;
+                emojiText.style.textShadow = '1px 1px 0 rgba(0,0,0,0.2)';
+                emojiContainer.appendChild(emojiText);
+                
+                // 添加控制按钮
+                const controls = document.createElement('div');
+                controls.className = 'emoji-controls';
+                
+                // 放大按钮
+                const zoomInBtn = document.createElement('button');
+                zoomInBtn.className = 'emoji-control-btn';
+                zoomInBtn.innerHTML = '+';
+                zoomInBtn.title = 'Zoom In';
+                zoomInBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const currentSize = parseFloat(getComputedStyle(emojiContainer).fontSize);
+                    emojiContainer.style.fontSize = (currentSize + 4) + 'px';
+                });
+                
+                // 缩小按钮
+                const zoomOutBtn = document.createElement('button');
+                zoomOutBtn.className = 'emoji-control-btn';
+                zoomOutBtn.innerHTML = '-';
+                zoomOutBtn.title = 'Zoom Out';
+                zoomOutBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const currentSize = parseFloat(getComputedStyle(emojiContainer).fontSize);
+                    if (currentSize > 20) { // 设置最小尺寸
+                        emojiContainer.style.fontSize = (currentSize - 4) + 'px';
+                    }
+                });
+                
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'emoji-control-btn';
+                deleteBtn.innerHTML = '×';
+                deleteBtn.title = 'Delete';
+                deleteBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    emojiContainer.remove();
+                    
+                    // 更新emoji计数
+                    updateEmojiCount(canvas);
+                });
+                
+                controls.appendChild(zoomInBtn);
+                controls.appendChild(zoomOutBtn);
+                controls.appendChild(deleteBtn);
+                emojiContainer.appendChild(controls);
+                
+                // 随机位置但避开边缘和控制区域
+                const canvasWidth = canvas.offsetWidth;
+                const canvasHeight = canvas.offsetHeight;
+                
+                const x = 20 + Math.random() * (canvasWidth - 80);
+                const y = 50 + Math.random() * (canvasHeight - 100);
+                
+                emojiContainer.style.left = `${x}px`;
+                emojiContainer.style.top = `${y}px`;
+                
+                canvas.appendChild(emojiContainer);
+                makeEmojiDraggable(emojiContainer);
+                
+                // 更新emoji计数
+                updateEmojiCount(canvas);
+            }
+        }
+        
+        // 更新emoji计数
+        function updateEmojiCount(canvas) {
+            const emojiCount = canvas.querySelectorAll('.emoji').length;
+            const statsElement = canvas.querySelector('.encoder-stats');
+            if (statsElement) {
+                statsElement.innerHTML = `Status: ${emojiCount > 0 ? 'Encoding' : 'Ready'}<br>Emoji Count: ${emojiCount}<br>Version: 1.0`;
+            }
+        }
+        
+        // 使Emoji可拖动
+        function makeEmojiDraggable(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            element.onmousedown = dragMouseDown;
+            element.ontouchstart = dragTouchStart;
+            
+            function dragMouseDown(e) {
+                e.preventDefault();
+                // 获取鼠标位置
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function dragTouchStart(e) {
+                const touch = e.touches[0];
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                document.ontouchend = closeTouchDragElement;
+                document.ontouchmove = elementTouchDrag;
+            }
+            
+            function elementDrag(e) {
+                e.preventDefault();
+                // 计算新位置
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                // 设置元素新位置
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function elementTouchDrag(e) {
+                const touch = e.touches[0];
+                pos1 = pos3 - touch.clientX;
+                pos2 = pos4 - touch.clientY;
+                pos3 = touch.clientX;
+                pos4 = touch.clientY;
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+            }
+            
+            function closeTouchDragElement() {
+                document.ontouchend = null;
+                document.ontouchmove = null;
+            }
+        }
+        
+        // API调用函数
+        async function translateToEmoji(story) {
+            try {
+                // 添加加载消息 - 使用一个固定ID以便稍后移除
+                const loadingId = 'loading-message-' + Date.now();
+                const loadingMessage = addMessage('Converting your story to Emoji...', 'bot', loadingId);
+                
+                // API调用
+                const token = 'pat_JHnX7kcTdVe5UjRzLY76zmIhTjTC5pDE7hnUyV6HUGf4Tl4KYcTOS4ZIMsS2uOvu';
+                const response = await fetch('https://api.coze.cn/v1/workflow/run', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        "workflow_id": "7490112512685129754",
+                        "parameters": {
+                            "user_id": "12345",
+                            "user_name": "George",
+                            "input": story
+                        }
+                    })
+                });
+
+                const responseText = await response.text();
+                console.log('API raw response:', responseText);
+                
+                if (!response.ok) {
+                    throw new Error(`API error (${response.status}): ${responseText}`);
+                }
+
+                try {
+                    const data = JSON.parse(responseText);
+                    console.log('Parsed API data:', data);
+                    
+                    if (data.code === 0) {
+                        const result = JSON.parse(data.data);
+                        console.log('Parsed result data:', result);
+                        
+                        let emojis = '';
+                        if (result.output) {
+                            emojis = result.output;
+                            console.log('Extracted Emoji string:', emojis);
+                        } else {
+                            throw new Error('No emoji results in API response data');
+                        }
+                        
+                        // 移除加载消息
+                        removeMessageById(loadingId);
+                        
+                        // 只更新emoji风格选择区域，不影响其他内容
+                        updateEmojiStyles(emojis);
+                        
+                        // 添加简短提示消息
+                        addMessage('Emoji styles updated! Select one to add emojis to your canvas.', 'bot');
+                        
+                    } else {
+                        throw new Error(`API returned error: ${data.msg || 'Unknown error'}`);
+                    }
+                } catch (jsonError) {
+                    console.error('Error processing API response:', jsonError);
+                    throw new Error('Error processing API response: ' + jsonError.message);
+                }
+            } catch (error) {
+                console.error('Request error:', error);
+                
+                // 移除加载消息
+                const loadingMessages = document.querySelectorAll('.bot-message');
+                loadingMessages.forEach(msg => {
+                    if (msg.textContent.includes('Converting your story')) {
+                        msg.remove();
+                    }
+                });
+                
+                addMessage('Conversion failed: ' + error.message, 'bot');
+            }
+        }
+        
+        // 根据ID移除消息
+        function removeMessageById(id) {
+            const message = document.getElementById(id);
+            if (message) {
+                message.remove();
+            }
+        }
+        
+        // 更新emoji风格选择区域
+        function updateEmojiStyles(emojis) {
+            // 清空现有的emoji风格容器内容
+            const existingContainer = document.querySelector('.emoji-styles-container');
+            if (existingContainer) {
+                // 保留容器，只清空内容
+                existingContainer.innerHTML = '';
+                
+                // 添加emoji显示区域
+                const emojiDisplay = document.createElement('div');
+                emojiDisplay.className = 'emoji-display';
+                emojiDisplay.style.display = 'flex';
+                emojiDisplay.style.flexDirection = 'row';
+                emojiDisplay.style.justifyContent = 'space-between';
+                emojiDisplay.style.gap = '8px';
+                emojiDisplay.style.width = '100%';
+                emojiDisplay.style.marginBottom = '0';
+                
+                // 重置当前选中的风格状态
+                window.selectedStyle = null;
+                window.hasSelectedStyle = false;
+                
+                // 将文本按行分割
+                const lines = emojis.split('\n');
+                lines.forEach((line, index) => {
+                    if (line.trim()) {
+                        const lineDiv = document.createElement('div');
+                        lineDiv.style.padding = '10px';
+                        lineDiv.style.backgroundColor = '#ffffff';
+                        lineDiv.style.borderRadius = '0'; // 移除圆角
+                        lineDiv.style.boxShadow = 'none';
+                        lineDiv.style.border = '1px solid';
+                        lineDiv.style.borderColor = '#808080 #ffffff #ffffff #808080'; // 内嵌效果
+                        lineDiv.style.cursor = 'pointer';
+                        lineDiv.style.transition = 'all 0.3s ease';
+                        lineDiv.dataset.styleIndex = index;
+                        lineDiv.style.flex = '1';
+                        lineDiv.style.minWidth = '0';
+                        lineDiv.style.maxWidth = '32%';
+                        lineDiv.style.marginBottom = '0';
+                        lineDiv.style.maxHeight = '120px';
+                        lineDiv.style.overflow = 'hidden';
+                        
+                        // 添加选中效果
+                        lineDiv.addEventListener('click', () => {
+                            if (!window.hasSelectedStyle) {
+                                window.selectedStyle = index;
+                                window.hasSelectedStyle = true;
+                                
+                                document.querySelectorAll('.emoji-display > div').forEach(div => {
+                                    const styleIndex = parseInt(div.dataset.styleIndex);
+                                    if (styleIndex === index) {
+                                        div.style.backgroundColor = '#c0c0c0'; // 选中背景色改为灰色
+                                        div.style.transform = 'scale(1)'; // 移除缩放效果
+                                        div.style.cursor = 'default';
+                                        div.style.borderColor = '#808080 #ffffff #ffffff #808080'; // 更改边框为内嵌效果
+                                        
+                                        // 激活选中风格的emoji
+                                        const emojiSpans = div.querySelectorAll('span');
+                                        emojiSpans.forEach(span => {
+                                            span.style.cursor = 'pointer';
+                                            span.style.opacity = '1';
+                                            span.style.pointerEvents = 'auto';
+                                        });
+                                    } else {
+                                        div.style.backgroundColor = '#e0e0e0';
+                                        div.style.opacity = '0.5';
+                                        div.style.cursor = 'not-allowed';
+                                        
+                                        // 禁用未选中风格的emoji
+                                        const emojiSpans = div.querySelectorAll('span');
+                                        emojiSpans.forEach(span => {
+                                            span.style.cursor = 'default';
+                                            span.style.opacity = '0.5';
+                                            span.style.transform = 'scale(1)';
+                                            span.style.pointerEvents = 'none';
+                                        });
+                                    }
+                                });
+                            }
+                        });
+                        
+                        const parts = line.split(':');
+                        if (parts.length === 2) {
+                            // 添加emoji容器
+                            const emojiContainer = document.createElement('div');
+                            emojiContainer.style.display = 'flex';
+                            emojiContainer.style.flexWrap = 'wrap';
+                            emojiContainer.style.gap = '6px';
+                            emojiContainer.style.alignItems = 'center';
+                            emojiContainer.style.justifyContent = 'center';
+                            
+                            // 提取所有emoji
+                            const emojisArray = [];
+                            [...parts[1]].forEach(char => {
+                                const isEmoji = /\p{Emoji}|\p{Emoji_Presentation}|\p{Extended_Pictographic}/u.test(char);
+                                const specialCharMap = {
+                                    '♂': '👨',
+                                    '♀': '👩',
+                                    '❄': '❄️',
+                                    '⭐': '⭐️',
+                                    '☀': '☀️',
+                                };
+                                
+                                const displayChar = specialCharMap[char] || char;
+                                
+                                if (isEmoji || specialCharMap[char]) {
+                                    emojisArray.push(displayChar);
+                                }
+                            });
+                            
+                            // 计算适当的字体大小和每行显示的emoji数量
+                            const totalEmojis = emojisArray.length;
+                            let fontSize = 24; // 默认字体大小
+                            let emojisPerRow = Math.ceil(Math.sqrt(totalEmojis)); // 默认基于总数的平方根
+                            
+                            // 根据emoji数量动态调整大小
+                            if (totalEmojis > 10) {
+                                fontSize = 18; // 调整为18px
+                                emojisPerRow = Math.ceil(totalEmojis / 2); // 最多显示2行
+                            }
+                            if (totalEmojis > 15) {
+                                fontSize = 16; // 调整为16px
+                                emojisPerRow = Math.ceil(totalEmojis / 2);
+                            }
+                            if (totalEmojis > 20) {
+                                fontSize = 14; // 调整为14px
+                                emojisPerRow = Math.ceil(totalEmojis / 2);
+                            }
+                            
+                            // 创建emoji元素
+                            emojisArray.forEach(displayChar => {
+                                const span = document.createElement('span');
+                                span.textContent = displayChar;
+                                span.style.fontSize = `${fontSize}px`;
+                                span.style.cursor = 'default';
+                                span.style.transition = 'transform 0.1s, opacity 0.3s';
+                                span.style.display = 'inline-block';
+                                span.style.opacity = '0.5';
+                                span.style.pointerEvents = 'none';
+                                span.style.lineHeight = '1.2';
+                                // 添加像素风格阴影效果
+                                span.style.textShadow = '1px 1px 0 #000';
+                                
+                                span.addEventListener('mouseover', () => {
+                                    if (window.selectedStyle === index) {
+                                        span.style.transform = 'scale(1.2)';
+                                    }
+                                });
+                                
+                                span.addEventListener('mouseout', () => {
+                                    if (window.selectedStyle === index) {
+                                        span.style.transform = 'scale(1)';
+                                    }
+                                });
+                                
+                                span.addEventListener('click', (e) => {
+                                    e.stopPropagation();
+                                    if (window.selectedStyle === index && window.emojiCanvas) {
+                                        addSingleEmoji(displayChar, window.emojiCanvas);
+                                    }
+                                });
+                                
+                                emojiContainer.appendChild(span);
+                            });
+                            
+                            lineDiv.appendChild(emojiContainer);
+                        }
+                        
+                        emojiDisplay.appendChild(lineDiv);
+                    }
+                });
+                
+                existingContainer.appendChild(emojiDisplay);
+            }
+        }
+        
+        // 初始化时设置页面背景颜色（保持不变）
+        document.body.style.backgroundColor = 'white';
+        
+        // 更新自定义渐变预览
+        function updateGradientPreview() {
+            const color1 = gradientColor1.value;
+            const color2 = gradientColor2.value;
+            const direction = gradientDirection.value;
+            const gradient = `linear-gradient(${direction}, ${color1}, ${color2})`;
+            gradientPreview.style.background = gradient;
+        }
+        
+        // 初始化渐变预览
+        updateGradientPreview();
+        
+        // 监听自定义渐变色输入变化
+        gradientColor1.addEventListener('input', updateGradientPreview);
+        gradientColor2.addEventListener('input', updateGradientPreview);
+        gradientDirection.addEventListener('change', updateGradientPreview);
+        
+        // 应用自定义渐变
+        applyCustomGradient.addEventListener('click', () => {
+            const color1 = gradientColor1.value;
+            const color2 = gradientColor2.value;
+            const direction = gradientDirection.value;
+            const customGradient = `linear-gradient(${direction}, ${color1}, ${color2})`;
+            currentCanvasBackground = customGradient;
+            applyCanvasBackground(customGradient);
+            gradientOptions.classList.remove('show');
+        });
+        
+        // 修复渐变方向选择器
+        document.getElementById('gradientDirection').addEventListener('change', function(e) {
+            e.stopPropagation(); // 阻止事件冒泡，防止关闭面板
+            updateGradientPreview();
+        });
+        
+        // 点击页面其他区域关闭渐变选项，但排除选择器本身
+        document.addEventListener('click', (e) => {
+            if (!gradientOptions.contains(e.target) && e.target !== gradientBtn) {
+                gradientOptions.classList.remove('show');
+            }
+        });
+        
+        // 防止点击渐变选项面板时关闭它
+        gradientOptions.addEventListener('click', (e) => {
+            e.stopPropagation();
+        });
+    </script>
+</body>
+</html> 

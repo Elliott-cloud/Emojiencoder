@@ -894,6 +894,64 @@
         });
         
         // 保存创作
+        // Split CSS arguments without splitting commas inside rgb()/rgba().
+        function splitGradientArguments(value) {
+            const parts = [];
+            let depth = 0;
+            let start = 0;
+            for (let i = 0; i < value.length; i++) {
+                if (value[i] === '(') depth++;
+                if (value[i] === ')') depth--;
+                if (value[i] === ',' && depth === 0) {
+                    parts.push(value.slice(start, i).trim());
+                    start = i + 1;
+                }
+            }
+            parts.push(value.slice(start).trim());
+            return parts;
+        }
+
+        function createExportGradient(context, backgroundImage, width, height) {
+            const match = backgroundImage.match(/^linear-gradient\((.*)\)$/);
+            if (!match) throw new Error('Unsupported gradient background');
+            const parts = splitGradientArguments(match[1]);
+            let direction = 'to bottom';
+            if (/^to\s|^-?[\d.]+(?:deg|rad|turn|grad)$/.test(parts[0])) {
+                direction = parts.shift();
+            }
+            let dx = 0;
+            let dy = 1;
+            if (direction.startsWith('to ')) {
+                dx = direction.includes('right') ? 1 : direction.includes('left') ? -1 : 0;
+                dy = direction.includes('bottom') ? 1 : direction.includes('top') ? -1 : 0;
+                // CSS corner gradients are perpendicular to the opposite diagonal.
+                if (dx && dy) {
+                    dx *= height;
+                    dy *= width;
+                }
+                const magnitude = Math.hypot(dx, dy);
+                dx /= magnitude;
+                dy /= magnitude;
+            } else {
+                const angle = parseFloat(direction);
+                const radians = direction.endsWith('turn') ? angle * 2 * Math.PI
+                    : direction.endsWith('grad') ? angle * Math.PI / 200
+                    : direction.endsWith('rad') ? angle : angle * Math.PI / 180;
+                dx = Math.sin(radians);
+                dy = -Math.cos(radians);
+            }
+            const length = Math.abs(width * dx) + Math.abs(height * dy);
+            const gradient = context.createLinearGradient(
+                width / 2 - dx * length / 2, height / 2 - dy * length / 2,
+                width / 2 + dx * length / 2, height / 2 + dy * length / 2
+            );
+            // The background controls produce two colors with implicit endpoints.
+            parts.forEach((color, index) => {
+                gradient.addColorStop(index / (parts.length - 1), color);
+            });
+            return gradient;
+        }
+
         saveBtn.addEventListener('click', () => {
             const canvases = document.querySelectorAll('.emoji-canvas');
             if (canvases.length === 0) {
@@ -913,33 +971,18 @@
                 tempCanvas.width = canvas.offsetWidth;
                 tempCanvas.height = canvas.offsetHeight;
                 
-                // 计算背景（纯色或渐变）
-                const canvasBackground = canvas.style.background || currentCanvasBackground;
-                
-                // 填充背景颜色
-                if (canvasBackground.includes('gradient')) {
-                    // 处理渐变背景
-                    const gradient = context.createLinearGradient(0, 0, 0, tempCanvas.height);
-                    // 简单解析渐变字符串来提取颜色
-                    const match = canvasBackground.match(/linear-gradient\(to bottom, (.*?), (.*?)\)/);
-                    if (match && match.length >= 3) {
-                        gradient.addColorStop(0, match[1]);
-                        gradient.addColorStop(1, match[2]);
-                        context.fillStyle = gradient;
-                    } else {
-                        // 回退到蓝色渐变
-                        gradient.addColorStop(0, '#7aadff');
-                        gradient.addColorStop(1, '#4c8bf5');
-                        context.fillStyle = gradient;
-                    }
-                    context.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
-                } else {
-                    // 纯色背景
-                    context.fillStyle = canvasBackground;
+                // Read background layers separately: shorthand may include other CSS values.
+                const backgroundStyle = window.getComputedStyle(canvas);
+                const bgImg = backgroundStyle.backgroundImage;
+                context.fillStyle = backgroundStyle.backgroundColor;
+                context.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                if (bgImg.startsWith('linear-gradient(')) {
+                    context.fillStyle = createExportGradient(
+                        context, bgImg, tempCanvas.width, tempCanvas.height
+                    );
                     context.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
                 }
-                // 平铺像素点SVG背景（如果有）
-                const bgImg = canvas.style.backgroundImage;
+                // Tile the existing SVG texture for solid backgrounds.
                 if (bgImg && bgImg.includes('svg')) {
                     // 提取SVG数据
                     const svgMatch = bgImg.match(/url\(["']?(data:image\/svg\+xml;[^"')]+)["']?\)/);
